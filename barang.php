@@ -27,7 +27,7 @@ if (!$_SESSION ['user_login']) {
   </head>
   <body background="gambar/8.jpg">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand font-weight-bold" href="home.html">DATA SERVICE</a>
+      <a class="navbar-brand font-weight-bold" href="daftar_service.php">DATA SERVICE</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -101,11 +101,11 @@ if (!$_SESSION ['user_login']) {
               $nama = $_POST['nama'];
               $cari = "SELECT * FROM view_proses_service WHERE nama_pelanggan like '%$nama%'  AND status = 'selesai'";
               $peta = mysqli_query($conn, $cari);                      
-              $no = 1;
+              $no1 = 1;
               foreach($peta as $pel){
                 ?>
 
-                <td><?php echo $no ?></td>
+                <td><?php echo $no1 ?></td>
                 <td><?php echo $pel['id'];?></td>
                 <td data-toggle="tooltip" data-placement="bottom" title="<b>No Hp :</b> <em><?php echo $pel['no_hp'];?></em><br><b>Alamat :</b> <em><?php echo $pel['alamat'];?></em></em>" data-html="true"><?php echo $pel['nama_pelanggan'];?>
               </td>
@@ -120,7 +120,7 @@ if (!$_SESSION ['user_login']) {
                   <td align="right">
 
                     <a href="proses_sudah_diambil.php?dambl=<?php echo $pel['id'];?>" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalambil<?php echo $pel['id'];?>">✔</a>
-                    <a href="bisadiambil_to_proses.php?bsdambl=<?php echo $pel['id'];?>" style="font-size: 14px" type="submit" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modaledit<?php echo $pel['id'];?>">&#x21bb</a>
+                    <a href="bisadiambil_to_proses.php?bsdambl=<?php echo $pel['id'];?>" style="font-size: 14px" type="button submit" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modaledit<?php echo $pel['id'];?>">&#x21bb</a>
 
                     <div id="modalambil<?php echo $pel['id'];?>" class="modal fade" role="dialog">
                       <div class="modal-dialog">
@@ -230,26 +230,13 @@ if (!$_SESSION ['user_login']) {
                             </div>
                             <!-- body modal -->
                             <div class="modal-body">
-                              <form action="proses_ubah_daftar_service.php" method="POST">
+                              <form action="bisadiambil_to_proses.php" method="POST">
                                 <input type="hidden" name="id_service" value="<?php echo $pel['id'];?>">
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" style="width: 118px" id="inputGroup-sizing-default">Nama</span>
                                   </div>
-                                  <select class="form-control select_name" name="state"  style="width: 74.5%" disabled="true">
-                                    <?php
-                                    $tampil2 = "SELECT * FROM tbl_pelanggan";
-                                    $pelgn = mysqli_query ($conn, $tampil2);
-                                    $no = 1;
-                                    foreach($pelgn as $plgn){ 
-                                      ?>
-
-                                      <option value="<?php echo $plgn['nama_pelanggan'] ?>,<?php echo $plgn['no_hp'] ?>"><?php echo $plgn['nama_pelanggan'] ?> (<?php echo $plgn['no_hp'] ?>)</option>
-                                      <?php 
-                                      $no++;
-                                    }                    
-                                    ?>
-                                  </select>
+                                  <input type="text" name="nama_dll" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<?php echo $pel['nama_pelanggan'].",".$pel['no_hp'];?>"readonly>
                                 </div>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
@@ -303,7 +290,7 @@ if (!$_SESSION ['user_login']) {
                     </td>
                   </tr>
                   <?php
-                  $no++;
+                  $no1++;
                 }
                 ?>
               </tbody>
@@ -334,11 +321,11 @@ if (!$_SESSION ['user_login']) {
                 $tampil = "SELECT * FROM view_proses_service WHERE status='selesai'";
                 $sv = mysqli_query ($conn, $tampil);
                     // var_dump($conn->query("SELECT * FROM tbl_proses_service WHERE status='proses'"));
-                $no = 1;
+                $no2 = 1;
                 foreach($sv as $service){                        
                   ?>
 
-                  <td><?php echo $no ?></td>
+                  <td><?php echo $no2 ?></td>
                   <td><?php echo $service['id'];?></td>
                   <td data-toggle="tooltip" data-placement="bottom" title="<b>No Hp :</b> <em><?php echo $service['no_hp'];?></em><br><b>Alamat :</b> <em><?php echo $service['alamat'];?></em></em>" data-html="true"><?php echo $service['nama_pelanggan'];?>
                 </td>
@@ -452,6 +439,7 @@ if (!$_SESSION ['user_login']) {
                             </form>
                           </div>
                         </div>
+
                         <div id="modaledit<?php echo $service['id'];?>" class="modal fade" role="dialog">
                           <div class="modal-dialog">
                             <!-- konten modal-->
@@ -469,20 +457,7 @@ if (!$_SESSION ['user_login']) {
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" style="width: 118px" id="inputGroup-sizing-default">Nama</span>
                                     </div>
-                                    <select class="form-control select_name" name="state"  style="width: 74.5%" disabled="true">
-                                      <?php
-                                      $tampil2 = "SELECT * FROM tbl_pelanggan";
-                                      $pelgn = mysqli_query ($conn, $tampil2);
-                                      $no = 1;
-                                      foreach($pelgn as $plgn){ 
-                                        ?>
-
-                                        <option value="<?php echo $plgn['nama_pelanggan'] ?>,<?php echo $plgn['no_hp'] ?>"><?php echo $plgn['nama_pelanggan'] ?> (<?php echo $plgn['no_hp'] ?>)</option>
-                                        <?php 
-                                        $no++;
-                                      }                    
-                                      ?>
-                                    </select>
+                                    <input type="text" name="nama_dll" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<?php echo $service['nama_pelanggan'].",".$service['no_hp'];?>"readonly>
                                   </div>
                                   <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -523,20 +498,21 @@ if (!$_SESSION ['user_login']) {
                                 </div>
                                 <!-- footer modal -->
                                 <div class="modal-footer">
-                                  <button type="submit" class="btn btn-success" onclick="return confirm('Ubah Ke Proses Service ?')">Save</a>
+                                  <button type="submit" name="savetoprocess" class="btn btn-success" onclick="return confirm('Ubah Ke Proses Service ?')">Save</a>
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                   </div>
                                 </div>
 
                               </form>
+
                             </div>
                           </div>
-
+                          
                         </td>
                       </td>
                     </tr>
                     <?php
-                    $no++;
+                    $no2++;
                   }
                   ?>
                 </tbody>
